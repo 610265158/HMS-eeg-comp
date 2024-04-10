@@ -1,16 +1,12 @@
-import math
+
 import sys
-
-import yaml
-
 sys.path.append('.')
 
 import timm
 
 import torchaudio
 import torch.nn as nn
-import torch
-import random
+
 
 class Transform50s(nn.Module):
     def __init__(self, ):
@@ -62,6 +58,8 @@ class Model(nn.Module):
                                   model_name,  pretrained=True)
 
 
+
+        self.net.blocks[5].pool.pool=nn.AdaptiveAvgPool3d(1)
         # self.net.blocks[5]=nn.Identity()
         # self.net.avgpool = nn.Identity()
         self.net.blocks[5].dropout = nn.Identity()
@@ -124,7 +122,7 @@ if __name__ == '__main__':
     model = Net()
 
     # x = model( dummy_waves)
-    macs, params = profile(model, inputs=[dummy_waves,dummy_data])
+    macs, params = profile(model, inputs=[dummy_waves])
     macs, params = clever_format([macs, params], "%.3f")
 
     print(macs,params)

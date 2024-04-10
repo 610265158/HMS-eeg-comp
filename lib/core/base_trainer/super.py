@@ -80,6 +80,8 @@ class Modelspec(nn.Module):
         self.net = torch.hub.load('facebookresearch/pytorchvideo',
                                   model_name, pretrained=True)
 
+
+        self.net.blocks[5].pool.pool=nn.AdaptiveAvgPool3d(1)
         # self.net.blocks[5]=nn.Identity()
         # self.net.avgpool = nn.Identity()
         self.net.blocks[5].dropout = nn.Identity()
