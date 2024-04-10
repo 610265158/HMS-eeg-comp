@@ -3,6 +3,7 @@
 
 ## 1. data
 
+The hms data unzip to ../hms-harmful-brain-activity-classification
 produce new train.csv by
 ```
 python reconstructed_target.py
