@@ -59,7 +59,7 @@ class Model(nn.Module):
 
         model_name = "x3d_l"
         self.net = torch.hub.load('facebookresearch/pytorchvideo',
-                                  model_name,  pretrained=True,source='local')
+                                  model_name,  pretrained=True)
 
 
         # self.net.blocks[5]=nn.Identity()
