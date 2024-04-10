@@ -1,13 +1,15 @@
 # -*-coding:utf-8-*-
 
-import sklearn.metrics
-import cv2
+
 import time
 import os
-import pandas as pd
-from torch.utils.data import DataLoader
 
-from lib.core.utils.torch_utils import EMA
+import torch
+
+from tqdm import tqdm
+from torch.utils.data import DataLoader
+from torch.utils.data.distributed import DistributedSampler
+
 from lib.dataset.dataietr import AlaskaDataIter
 
 from train_config import config as cfg
@@ -15,19 +17,7 @@ from train_config import config as cfg
 
 
 from lib.core.base_trainer.metric import *
-import torch
-
-
-
-
-
 from lib.core.base_trainer.model import Net
-
-
-from torch.utils.data.distributed import DistributedSampler
-
-from tqdm import tqdm
-#
 
 
 
@@ -141,9 +131,6 @@ class Train(object):
         else:
             self.model=nn.DataParallel(self.model)
 
-        self.ema = EMA(self.model, 0.97)
-
-        self.ema.register()
         ###control vars
         self.iter_num = 0
 
@@ -222,8 +209,7 @@ class Train(object):
                     self.scaler.step(self.optimizer)
                     self.scaler.update()
                     self.optimizer.zero_grad()
-                if cfg.MODEL.ema:
-                    self.ema.update()
+
                 self.iter_num += 1
                 time_cost_per_batch = time.time() - start
 
@@ -298,9 +284,7 @@ class Train(object):
 
            
 
-            ##switch eam weighta
-            if cfg.MODEL.ema:
-                self.ema.apply_shadow()
+
 
             if epoch % cfg.TRAIN.test_interval == 0:
                 summary_loss,oof_pre,oof_gt,oof_weight = distributed_test_epoch(epoch)
@@ -335,9 +319,6 @@ class Train(object):
             logger.info('A model saved to %s' % current_model_saved_name)
             torch.save(self.model.module.state_dict(), current_model_saved_name)
 
-            ####switch back
-            if cfg.MODEL.ema:
-                self.ema.restore()
 
             # save_checkpoint({
             #           'state_dict': self.model.state_dict(),
