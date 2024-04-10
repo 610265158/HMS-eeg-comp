@@ -6,7 +6,7 @@ import timm
 
 import torchaudio
 import torch.nn as nn
-
+import torch
 
 class Transform50s(nn.Module):
     def __init__(self, ):
