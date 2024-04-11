@@ -3,8 +3,9 @@
 
 ## 1. data
 
-The hms data unzip to ../hms-harmful-brain-activity-classification
-produce new train.csv by
+Unzip the hms data to ../hms-harmful-brain-activity-classification
+
+Produce new train.csv by
 ```
 python reconstructed_target.py
 ```
@@ -30,7 +31,7 @@ config.TRAIN.init_lr=0.0001
 #### 3.2 average the best 3 weights per fold by run
 
 ``` python avg_checkpoint.py ```
-it will produce avg_fold0.pth .....avg_fold9.pth, idon't know how much it help to use a checkpoints average here.
+It will produce avg_fold0.pth .....avg_fold9.pth, idon't know how much it help to use a checkpoints average here.
 
 #### 
 ```python train.py```
